@@ -14,19 +14,14 @@ def mfcc(data, sr): return np.ravel(librosa.feature.mfcc(y=data, sr=sr).T)
 def extract_features(data, sr=22050, fl=2048, hl=512):
     return np.hstack((np.array([]), zcr(data,fl,hl), rms(data, fl, hl), mfcc(data, sr)))
 
-def get_features(path):
-    data, _ = librosa.load(path, duration=2.5, offset=0.6)
-    result = np.array(extract_features(data))
+def get_features(audioData):
+    data, sr = librosa.load(audioData); res = np.array(extract_features(data, sr))
+    return np.expand_dims(scaler.transform(np.reshape(res, newshape=(1, res.shape[0]))), axis=2)
 
-    result = np.reshape(result, newshape=(1, result.shape[0]))
-    return np.expand_dims(scaler.transform(result), axis=2)
+def prediction(audioData): return encoder.inverse_transform(model.predict(get_features(audioData)))
 
-def prediction(path):
-    predictions=model.predict(get_features(path))
-    return encoder.inverse_transform(predictions)
-
-with open('./helper/scaler.pickle', 'rb') as f: scaler = pickle.load(f)
-with open('./helper/encoder.pickle', 'rb') as f: encoder = pickle.load(f)
+with open('./model/helper/scaler.pickle', 'rb') as f: scaler = pickle.load(f)
+with open('./model/helper/encoder.pickle', 'rb') as f: encoder = pickle.load(f)
 
 model = tf.keras.Sequential(
     [
@@ -47,4 +42,4 @@ model = tf.keras.Sequential(
     
         L.Flatten(), L.Dense(512,activation='relu'), L.BatchNormalization(), L.Dense(7,activation='softmax')
     ]
-); model.load_weights('./helper/weights.h5')
+); model.load_weights('./model/helper/weights.h5')
