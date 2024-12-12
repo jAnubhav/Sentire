@@ -10,19 +10,16 @@ const recordMyVoice = async () => {
     mediaRecorder.onstop = async () => {
         stat.textContent = "Status: Processing on Data...";
 
-        const audioBlob = new Blob(chunks, { type: 'audio/webm' });
-        const formData = new FormData();
-        formData.append('audio', audioBlob, 'recording.webm');
+        const formData = new FormData(); 
+        formData.append('audio', new Blob(chunks, { type: 'audio/webm' }));
     
-        await fetch('/process-audio', { method: 'POST', body: formData,
-        }).then(res => res.json()).then(data => stat.textContent = data);
+        await fetch('/process-audio', { method: 'POST', body: formData })
+        .then(res => res.json()).then(data => stat.textContent = `Result: ${data["data"]}`);
     };
     
     mediaRecorder.start();
-    console.log("started");
     
     setTimeout(() => {
         mediaRecorder.stop(); stream.getTracks().forEach(track => track.stop());
-        console.log("stopped")
     }, 10000);
 }
