@@ -1,2 +1,3 @@
 # Sentire
-Speech Emotion Recognition
+
+This project is a Speech Emotion Recognition (SER) system built using Flask and a TensorFlow Conv1D deep learning model. It processes audio files by extracting key features such as zero-crossing rate, root mean square energy, and Mel-frequency cepstral coefficients (MFCC). These features are standardized using a pre-trained scaler and passed through a convolutional neural network that classifies the emotion into one of seven categories. The model is trained with multiple Conv1D layers for efficient feature extraction, batch normalization for stability, and dropout layers for regularization. The system loads pre-trained weights and uses an inverse label encoder to return human-readable emotion predictions.
