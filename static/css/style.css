@@ -1,0 +1,22 @@
+.container {
+    gap: 4vh;
+    height: 100vh;
+}
+
+.h-text {
+    text-align: center;
+    width: 60%;
+}
+
+.btn {
+    padding: 7px 13px;
+
+    background: #ff2222;
+    color: white;
+    
+    font-size: 1em;
+    font-weight: 500;
+
+    border: none;
+    border-radius: 5px;
+}
